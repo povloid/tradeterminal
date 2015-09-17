@@ -1,0 +1,229 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/*
+ * SelectDataBaseDPanel.java
+ *
+ * Created on 09.07.2009, 1:19:36
+ */
+package tradeterminal;
+
+import java.awt.Component;
+import java.awt.Dimension;
+import java.beans.XMLDecoder;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
+import minersinstrument.ui.IADialogPanel;
+import org.jdesktop.application.Application;
+import tradeterminal.conf.AppConstants;
+import tt.db.settings.nodes.BaseNodeRow;
+import tt.db.settings.nodes.ServerNodeRow;
+import tt.db.settings.nodes.ServersList;
+
+/**
+ *
+ * @author pk
+ */
+public class SelectDataBaseDPanel extends javax.swing.JPanel implements IADialogPanel {
+
+    private class CellRender extends DefaultTreeCellRenderer {
+
+        final private ImageIcon iconServers = new javax.swing.ImageIcon(
+                getClass().getResource("/minersinstrument/ui/icons/ntwrk_24.png"));
+        final private ImageIcon iconServer = new javax.swing.ImageIcon(
+                getClass().getResource("/minersinstrument/ui/icons/hd_24.png"));
+        final private ImageIcon iconBase = new javax.swing.ImageIcon(
+                getClass().getResource("/tradeterminal/icons/TT_icons/24X24/bd.png"));
+
+        public CellRender() {
+        }
+
+        @Override
+        public Component getTreeCellRendererComponent(
+                JTree tree,
+                Object value,
+                boolean sel,
+                boolean expanded,
+                boolean leaf,
+                int row,
+                boolean hasFocus) {
+
+            Component c = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+
+            if (node instanceof ServerNodeRow) {
+                setIcon(iconServer);
+            } else if (node instanceof BaseNodeRow) {
+                setIcon(iconBase);
+            } else if (node instanceof ServersList) {
+                setIcon(iconServers);
+            }
+
+            return c;
+        }
+    }
+    private DefaultTreeModel treeModel;
+    private ServersList sList;
+    private String serverName;
+    private int port;
+    private String baseName;
+
+    /** Creates new form SelectDataBaseDPanel */
+    public SelectDataBaseDPanel() {
+        FileInputStream in = null;
+        try {
+            initComponents();
+
+            tree.setCellRenderer(new CellRender());
+
+            jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(32, 32));
+            jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(32, 32));
+
+
+            in = new FileInputStream(AppConstants.CONNECTION_SETTINGS_FILE);
+            XMLDecoder xmlDecoder = new XMLDecoder(in);
+            sList = (ServersList) xmlDecoder.readObject();
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(SelectDataBaseDPanel.class.getName()).log(Level.SEVERE, null, ex);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Не проинициализированы настройки!",
+                    "Ошибка...",
+                    JOptionPane.ERROR_MESSAGE);
+            Application.getInstance().exit();
+
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+
+
+            } catch (IOException ex) {
+                Logger.getLogger(SelectDataBaseDPanel.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+        treeModel = new DefaultTreeModel(sList);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.putClientProperty("JTree.lineStyle", "Horizontal");
+        tree.setEditable(false);
+        tree.setModel(treeModel);
+
+        for (int i = 0; i < tree.getRowCount(); i++) {
+            tree.expandRow(i);
+        }
+
+
+
+    }
+
+    private DefaultMutableTreeNode getSelectedNode() {
+        Object obj = tree.getLastSelectedPathComponent();
+
+        if (obj == null) {
+            obj = treeModel.getRoot();
+        }
+
+        return (DefaultMutableTreeNode) obj;
+    }
+
+    public String getBaseName() {
+        return baseName;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tree = new javax.swing.JTree();
+
+        setName("Form"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(tradeterminal.TradeTerminalApp.class).getContext().getResourceMap(SelectDataBaseDPanel.class);
+        tree.setFont(resourceMap.getFont("tree.font")); // NOI18N
+        tree.setName("tree"); // NOI18N
+        jScrollPane1.setViewportView(tree);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    @Override
+    public boolean checkPanel() {
+
+
+        // Получение текуще записи
+        DefaultMutableTreeNode dsel = getSelectedNode();
+
+        if (dsel instanceof BaseNodeRow) {
+
+            BaseNodeRow nr = (BaseNodeRow) dsel;
+
+            ServerNodeRow sn = (ServerNodeRow) nr.getParent();
+
+            serverName = sn.getHost();
+            port = sn.getPort();
+            baseName = nr.getDbName();
+
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "База данных не выбрана.",
+                    "Внимание...",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void openPanel() {
+        tree.requestFocus();
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTree tree;
+    // End of variables declaration//GEN-END:variables
+}

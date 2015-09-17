@@ -1,0 +1,9 @@
+tt.reports.z.TTRZOBForDate;Касса;Z за период
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Z за период<b></h1>
+        Выводит Z за период
+    </body>
+</html>

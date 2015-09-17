@@ -1,0 +1,9 @@
+tt.reports.orders_history.TTROrdersHistory;Клиент;История операций
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>История операций<b></h1>
+        Выводит все операции за период времени.
+    </body>
+</html>

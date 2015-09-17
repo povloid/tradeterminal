@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="prod_select_moving_v2" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9e0380b8-731f-4f56-a36d-87681765a9e9">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="535"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="REPORT_PARAMETRS_TEXT" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT
+	o.operation_type_code, oot.description,
+	pg.id as group_id, pg."name" as group_name,
+	o.id as order_id, o.order_date,
+	o.user_id, u."name" as user_name,
+	p."name" as product_name, p.scod, p.list_price, i.actual_price, i.quantity
+FROM
+	orders o, items i, products_groups pg, products p, orders_operations_types oot, users u
+WHERE
+	--o.operation_type_code in ('psl','pmn')
+	((o.operation_type_code = 'ppl' AND true)
+	OR (o.operation_type_code = 'pmn' AND true)
+	OR (o.operation_type_code = 'psl' AND true)
+	OR (o.operation_type_code = 'prt' AND true))
+
+	AND o.operation_type_code = oot.type_code
+	AND o.id = i.orders_id  AND i.products_id=p.id AND p.products_groups_id = pg.id
+	AND u.id = o.user_id
+
+ORDER BY o.id;]]>
+	</queryString>
+	<field name="operation_type_code" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="group_id" class="java.lang.Integer"/>
+	<field name="group_name" class="java.lang.String"/>
+	<field name="order_id" class="java.lang.Integer"/>
+	<field name="order_date" class="java.sql.Timestamp"/>
+	<field name="user_id" class="java.lang.Integer"/>
+	<field name="user_name" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="scod" class="java.lang.String"/>
+	<field name="list_price" class="java.math.BigDecimal"/>
+	<field name="actual_price" class="java.math.BigDecimal"/>
+	<field name="quantity" class="java.math.BigDecimal"/>
+	<field name="order_description" class="java.lang.String"/>
+	<group name="group_id">
+		<groupExpression><![CDATA[$F{group_id}]]></groupExpression>
+		<groupHeader>
+			<band height="19">
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="79" height="19" forecolor="#666666" backcolor="#CCCCCC" uuid="e2f5a4b5-44ea-4fd3-bfcc-6c99eda0caf7"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<text><![CDATA[Группа:]]></text>
+				</staticText>
+				<textField>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="79" y="0" width="73" height="19" forecolor="#000000" backcolor="#CCCCCC" uuid="f39fcb6d-c4bd-4321-861a-bae39110099f"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{group_id}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="152" y="0" width="650" height="19" backcolor="#CCCCCC" uuid="6636e09c-ff6f-411e-9beb-fb562920c686"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{group_name}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="operation_type_code">
+		<groupExpression><![CDATA[$F{operation_type_code}]]></groupExpression>
+		<groupHeader>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="100" y="0" width="702" height="17" backcolor="#FFFFCC" uuid="8e7e9123-c9c2-42d6-bcac-7445bb5842db"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="13" y="0" width="87" height="17" forecolor="#666666" backcolor="#FFFFCC" uuid="0e581efa-f312-4326-969e-d30732badc2d"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="7"/>
+					</textElement>
+					<text><![CDATA[Тип операции]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="84">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="842" height="104" backcolor="#FFFFFF" uuid="f1ccbce5-69a6-4bc4-a2c5-33ff2f1c2621"/>
+				<staticText>
+					<reportElement x="20" y="20" width="802" height="43" forecolor="#000000" uuid="745f9e20-bad8-4ad2-83ff-8dfc73d58186"/>
+					<textElement textAlignment="Center">
+						<font size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Товарооборот]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="20" y="63" width="802" height="15" forecolor="#000000" uuid="777968a2-49d2-4b74-8ed6-3a779660e586"/>
+					<textElement textAlignment="Left">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Товарооборот, сгрупированный по группам товаров а затем по типу операции]]></text>
+				</staticText>
+				<textField>
+					<reportElement mode="Transparent" x="149" y="78" width="673" height="16" forecolor="#000000" uuid="68467314-f138-466d-8566-4ecb224d771f"/>
+					<textElement verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{REPORT_PARAMETRS_TEXT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="20" y="78" width="129" height="16" forecolor="#000000" uuid="584b61ec-1df5-4728-8cf5-62a05b769cef"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<text><![CDATA[за промежуток:]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="13"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement mode="Opaque" x="13" y="0" width="36" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="cdcdf7ee-1e10-4a3f-bd45-c5267770d122"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[№]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="49" y="0" width="80" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="4054f1e5-791f-4835-b211-e72403ddf58f"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Время]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="129" y="0" width="74" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="28feee7b-dd7f-4791-a162-4492c91a04c1"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Польз.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="203" y="0" width="151" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="3ed35a87-b05f-4f65-b2b8-a57bb1b1aa70"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Продукт]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="478" y="0" width="88" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="b45e6401-bd05-4a55-913d-c31f394c5e22"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Штрихкод]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="566" y="0" width="92" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="a6cfbde3-4ae3-418b-af6b-ba7831bd0dd3"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Цена по прайсу]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="658" y="0" width="94" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="a6f990a9-f0fb-4be3-91e3-184e321397a4"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Цена при продаже]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="752" y="0" width="50" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="42f31823-e263-4d3b-bb18-4c2cc1ef5cff"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Кол.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="354" y="0" width="124" height="21" forecolor="#006699" backcolor="#E6E6E6" uuid="118f4c01-9f0d-41f7-b6a4-43b7fc0c2fb3"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Доп сведения]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="129" y="0" width="74" height="20" uuid="ebe5802c-f08b-45cd-87e0-496ea7081142"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="203" y="0" width="151" height="20" uuid="99c8e9d9-bfcf-4a24-9895-53f857bf0f92"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="478" y="0" width="88" height="20" uuid="8cdc1dc7-6fd3-431b-b903-8c2b24ebf4da"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{scod}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="566" y="0" width="92" height="20" uuid="830aacd6-ae17-45f6-b76a-f9716334b3cf"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_price}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="658" y="0" width="94" height="20" uuid="f0b6f128-ac9d-4b19-8d7e-2b31eb7040f6"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actual_price}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.000">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="752" y="0" width="50" height="20" uuid="6fca959e-c6ba-4e20-957a-13b743d4bd3b"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="13" y="0" width="36" height="20" uuid="f4acb5cf-0db0-4247-a717-28393ce9f414"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_id}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="yyyy.MM.dd HH:mm:ss">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="49" y="0" width="80" height="20" uuid="66d5bee8-3334-4141-ac6d-468e32ca212c"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="354" y="0" width="124" height="20" uuid="f7caf1b6-c8a5-4e31-90b5-bec76a025276"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{order_description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="716" height="13" backcolor="#E6E6E6" uuid="75053e2b-f140-456a-a2e5-822aa1c5d177"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}+" из"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="716" y="4" width="86" height="13" backcolor="#E6E6E6" uuid="91156282-9756-4072-af6e-5ea4591992e5"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="100" height="13" uuid="c142bf91-91b9-4605-94dd-66715c3742e6"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

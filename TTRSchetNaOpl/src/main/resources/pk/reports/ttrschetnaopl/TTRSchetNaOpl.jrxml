@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TTRSchetFactura" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6a55d80e-e60a-4d2a-8023-1567aea3f739">
+	<property name="ireport.zoom" value="1.24184264611831"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="CAPTION" class="java.lang.String"/>
+	<parameter name="POSTAVSHIK" class="java.lang.String"/>
+	<parameter name="POSTAVSHIK_RNN_BIN_ADR" class="java.lang.String"/>
+	<parameter name="POSTAVSHIK_DOGOVOR" class="java.lang.String"/>
+	<parameter name="PUNKT_NAZN" class="java.lang.String"/>
+	<parameter name="POST_PO_DOVERENOSTI" class="java.lang.String"/>
+	<parameter name="NAKL_NOMER" class="java.lang.String"/>
+	<parameter name="GRUZOOTPRAVITEL" class="java.lang.String"/>
+	<parameter name="GRUZOPOLUCHATEL" class="java.lang.String"/>
+	<parameter name="POLUCHATEL" class="java.lang.String"/>
+	<parameter name="POLUCHATEL_RNN_BIN_ADR" class="java.lang.String"/>
+	<parameter name="POLUCHATEL_RSH" class="java.lang.String"/>
+	<parameter name="POSTAVSHIK_RSH" class="java.lang.String"/>
+	<parameter name="parameter1" class="java.lang.String"/>
+	<parameter name="DIRECTOR" class="java.lang.String"/>
+	<parameter name="BUH" class="java.lang.String"/>
+	<parameter name="VYDAL" class="java.lang.String"/>
+	<parameter name="VYDAL_FIO" class="java.lang.String"/>
+	<parameter name="SCHET_NUM" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select  -- Сведения по операции
+o.id as oder_id,
+o.order_date as order_date,
+o.operation_type_code as operation_type_code,
+ot.description as order_operation_name,
+
+o.description as order_description,
+o.sub_order_id as sub_order_id,
+
+-- Сведения по пользователю
+o.user_id as user_id,
+u."name" as user_name,
+u.isadmin as isadmin,
+(case when(u.isadmin is true) then 'да' else 'нет' end ) as isadmin_ru,
+u.description as user_description,
+
+-- Сведения по проведенной операции
+o.credit as credit,
+(case when(o.credit is true) then 'да' else 'нет' end ) as credit_ru,
+(select abs(sum(ii.actual_price * ii.quantity))
+from items ii WHERE ii.orders_id = o.id) as to_cass,
+(case when cb.summ is null then 0 else cb.summ end) as to_balance,
+cb.description as to_balance_description,
+
+-- Сведения по клиенту
+o.customer_id,
+----------
+c.short_name,
+c.doc_type,
+c.doc,
+c.ur,
+(case when(c.ur is true) then 'да' else 'нет' end ) as ur_ru,
+----------
+c.fio,
+c.sex,
+c.address,
+c.phone_number,
+c.phone_number_2,
+c.email,
+c.description as customer_description,
+c.rnn,
+c.bin,
+c.rsh,
+
+-- Сведения по составу операции
+-- Группа товаров
+p.products_groups_id,
+(case when (pg."name" is null) then 'сумма' else pg."name" end) as products_groups_name,
+pg.description as products_groups_description,
+-- Товар
+i.products_id,
+(case when (p."name" is null) then 'Касса' else p."name" end) as product_name,
+p.scod,
+p.measures_id,
+ms."name" as measures_name,
+p.description as product_description,
+
+-- Оценка
+i.actual_price,
+i.quantity,
+i.actual_price * i.quantity AS summ
+
+from orders o
+LEFT OUTER JOIN customers c ON (o.customer_id = c.id )
+LEFT OUTER JOIN customers_balances cb ON (o.id = cb.order_id),
+
+     items i
+LEFT OUTER JOIN products p ON (i.products_id = p.id )
+LEFT OUTER JOIN products_groups pg ON (p.products_groups_id = pg.id)
+LEFT OUTER JOIN rb_measures ms ON (p.measures_id = ms.id)
+
+,orders_operations_types ot, users u
+
+where  o.id = 1600
+
+
+AND o.id=i.orders_id AND o.operation_type_code = type_code
+AND o.user_id = u.id --AND p.id is not null
+AND i.actual_price >= 0
+order by o.id;]]>
+	</queryString>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="actual_price" class="java.math.BigDecimal"/>
+	<field name="quantity" class="java.math.BigDecimal"/>
+	<field name="measures_name" class="java.lang.String"/>
+	<field name="summ" class="java.math.BigDecimal"/>
+	<field name="oder_id" class="java.lang.Number"/>
+	<field name="order_date" class="java.sql.Timestamp"/>
+	<field name="short_name" class="java.lang.String"/>
+	<field name="address" class="java.lang.String"/>
+	<field name="rnn" class="java.lang.String"/>
+	<field name="bin" class="java.lang.String"/>
+	<field name="rsh" class="java.lang.String"/>
+	<field name="product_description" class="java.lang.String"/>
+	<field name="scod" class="java.lang.String"/>
+	<variable name="SUMM_ALL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{summ}]]></variableExpression>
+	</variable>
+	<group name="g1" isStartNewPage="true">
+		<groupFooter>
+			<band height="14">
+				<textField pattern="###0.00;-###0.00">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="0" width="125" height="14" backcolor="#CCFFFF" uuid="a2dc09cc-91be-46f3-94bb-cb2edbd43f48"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMM_ALL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="22" height="14" uuid="587c8bb0-aea9-49bd-a4e0-570b902ce908"/>
+					<box leftPadding="2" rightPadding="2">
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="22" y="0" width="408" height="14" backcolor="#CCFFFF" uuid="4fca6a31-b3c8-4c89-84b0-26968d66a5c0"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[На общую сумму:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="138">
+			<textField>
+				<reportElement x="0" y="0" width="483" height="13" uuid="31b2aeb1-9ead-4469-9a05-324c0d1539d5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Счет № " + $P{SCHET_NUM} + " от " + DateFormat.getDateInstance().format($F{order_date})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="13" width="555" height="13" uuid="33c1c69d-ca65-4b07-882d-e737530a092c"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{POSTAVSHIK}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="26" width="555" height="25" uuid="0f8beda7-dee8-4a9a-b114-c840714521a4"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{POSTAVSHIK_RNN_BIN_ADR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="64" width="555" height="13" uuid="f1034f51-e7d9-4fa0-bf64-4aacc0004cb6"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{POSTAVSHIK_DOGOVOR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="77" width="555" height="22" uuid="72574fb5-9e32-492a-a30a-a535e5295379"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Получатель: " + $F{short_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="99" width="555" height="13" uuid="0fbf4024-afcd-4198-a457-f0ef1902c0ff"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["РНН, БИН и адрес места нахождения получателя: " + " РНН:" + $F{rnn} + ", БИН:" + $F{bin} + ", " + $F{address}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="112" width="555" height="26" uuid="cdc885e4-dd3b-4a29-aeb1-ad76dd318414"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Расчетный счет получателя (ИИК): " + $F{rsh}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="51" width="555" height="13" uuid="755fa16c-47de-4a9e-b8b5-67e5b5b6437a"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{POSTAVSHIK_RSH}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" mode="Opaque" x="483" y="0" width="72" height="13" uuid="233a7c94-1d7e-44af-8f5a-cf64fe1e0d73"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{oder_id}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="327" y="11" width="72" height="14" backcolor="#CCCCCC" uuid="cc025e6b-c4c1-4445-ad45-22bb51b42ed2"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[цена]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="442" y="11" width="41" height="14" backcolor="#CCCCCC" uuid="d828bddb-a511-4808-809b-12db5edb26f0"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[мера]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="11" width="22" height="14" backcolor="#CCCCCC" uuid="cd7369f1-4a78-44e1-a799-f3ec5043e532"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[№]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="191" y="11" width="136" height="14" backcolor="#CCCCCC" uuid="b974a8d7-14fb-4bf8-acb8-879f37e54cf3"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[штрихкод]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="22" y="11" width="169" height="14" backcolor="#CCCCCC" uuid="e4147f30-9736-416b-9b2c-a920b0b35d12"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[наименование]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="483" y="11" width="72" height="14" backcolor="#CCCCCC" uuid="068c2824-4f91-4dce-8398-04bb2ce7f8dd"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[сумма]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="399" y="11" width="43" height="14" backcolor="#CCCCCC" uuid="324eef4c-c332-4cf0-90af-799823b2d08c"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[колл.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="442" y="0" width="41" height="14" uuid="47961c89-6781-4091-acb8-fb44542d3152"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{measures_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="22" y="0" width="169" height="14" uuid="77275fbd-23a2-4409-9c8a-c893834dbb13"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="22" height="14" uuid="39125c47-bbf2-4cdd-bbbc-b2c4b1f66c9f"/>
+				<box leftPadding="2" rightPadding="2">
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="191" y="0" width="136" height="14" uuid="1a455492-6066-49db-9ae1-2d13cb684292"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{scod}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="327" y="0" width="72" height="14" uuid="dbaeb236-b310-40dd-9343-7fe0db433f27"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actual_price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="399" y="0" width="43" height="14" uuid="756951f4-ea71-4f25-8eb8-7f350b3f38df"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="483" y="0" width="72" height="14" uuid="eecca2be-c9ad-42ff-ad57-846806ba1c03"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{summ}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="0" width="100" height="10" uuid="51e5fe22-4267-4197-8bc8-5b4a5b7c3bca"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement mode="Opaque" x="100" y="0" width="415" height="10" backcolor="#FFFFFF" uuid="643a902f-2637-4dd1-ba74-b0b9995a7db1"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}+" из"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="0" width="40" height="10" backcolor="#FFFFFF" uuid="394fb509-440f-4681-9182-972c7ebcf828"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="122">
+			<staticText>
+				<reportElement x="261" y="42" width="51" height="49" uuid="5aee355c-3d9e-41cf-831d-8eab1cb04a7f"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[МП]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="10" y="22" width="205" height="12" uuid="4e70dc43-b1f1-4997-aa90-5d931e8b43bc"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{VYDAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="34" width="205" height="10" uuid="a32b7b02-8f9e-4773-a2ba-52bb80ae5f00"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="DejaVu Sans Mono" size="8" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[                                              ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="44" width="205" height="10" uuid="e764a3b3-50bb-47dd-8c25-81ffdfefcb1f"/>
+				<textElement textAlignment="Center">
+					<font fontName="DejaVu Sans Mono" size="6" isItalic="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[(должность)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="10" width="205" height="12" uuid="5df5eeaf-4ed2-4977-a1cc-7cb827847f43"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ВЫДАЛ (ответственное лице поставщика)]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,9 @@
+tt.reports.products_quantitys.TTRProductQuantitys;Товар;Остатки товара
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Остатки товара<b></h1>
+        Выводит остатки товара.
+    </body>
+</html>

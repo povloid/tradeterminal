@@ -1,0 +1,9 @@
+tt.reports.ttrprib.TTRPrib;Товар;Доход 
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Доход<b></h1>
+        Отчет по доходу
+    </body>
+</html>

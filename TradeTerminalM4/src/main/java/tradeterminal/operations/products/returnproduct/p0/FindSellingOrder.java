@@ -1,0 +1,1031 @@
+/*
+ * FindSellingOrder.java
+ *
+ * Created on 2 Апрель 2008 г., 15:08
+ */
+package tradeterminal.operations.products.returnproduct.p0;
+
+import java.awt.Dimension;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
+import minersinstrument.ui.ADialog;
+import minersinstrument.ui.AErrorDialog;
+import minersinstrument.ui.ANumbericCellRenderer;
+import minersinstrument.ui.AUniversalDialog;
+import minersinstrument.ui.IADialogPanel;
+import org.jdesktop.application.Action;
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode;
+import org.jdesktop.swingx.treetable.DefaultTreeTableModel;
+import tradeterminal.Setup;
+import tradeterminal.operations.info.OrderInfoM2;
+import tradeterminal.operations.products.returnproduct.p0.OrdersModel.OrderBy;
+import tradeterminal.references_books.customers.p0.FindCustomerDPAnel;
+import tradeterminal.references_books.customers.p1.FindDepCustomerDPAnel;
+
+/**
+ *
+ * @author  PKopychenko
+ */
+public final class FindSellingOrder extends javax.swing.JPanel implements IADialogPanel {
+
+    private ImageIcon ic1 = new ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/ponomeru.png"));
+    private ImageIcon ic2 = new ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/data.png"));
+    private ImageIcon ic3 = new ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/poiskpokodu.png"));
+    private ImageIcon ic4 = new ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/polzovatel.png"));
+    DefaultMutableTreeTableNode root = new DefaultMutableTreeTableNode();
+    OrdersModel dmodel;
+    List<OrderNode> nodes = new ArrayList<OrderNode>();
+
+    class SelectedCustomer {
+
+        private int id;
+        private String shortName;
+
+        public SelectedCustomer(int id, String shortName) {
+            this.id = id;
+            this.shortName = shortName;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getShortName() {
+            return shortName;
+        }
+    }
+    private SelectedCustomer selectedCustomer = null;
+    //MyTreeTableModel treeTableModel;
+    boolean findDepsSelingOrders = false;
+
+    public FindSellingOrder(boolean findDepsSelingOrders) {
+        this.findDepsSelingOrders = findDepsSelingOrders;
+
+        initComponents();
+
+        if (findDepsSelingOrders) {
+            forCustomerRadioButton.setText("По подразделению");
+        }
+
+
+        //treeTableModel = new MyTreeTableModel();
+
+        jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(32, 32));
+        jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(32, 32));
+
+
+        dmodel = new OrdersModel(this.findDepsSelingOrders);
+
+        ordersTreeTable.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        ordersTreeTable.putClientProperty("JTree.lineStyle", "Horizontal");
+        ordersTreeTable.setEditable(false);
+        ordersTreeTable.setRootVisible(false);
+        ordersTreeTable.setRowHeight(40);
+        ordersTreeTable.setTreeTableModel(dmodel);
+
+        ordersTreeTable.getColumnModel().getColumn(0).setPreferredWidth(250);
+        ordersTreeTable.getColumnModel().getColumn(0).setHeaderValue("Операция и ее состав");
+
+        ordersTreeTable.getColumnModel().getColumn(1).setHeaderValue("Кол.");
+        ordersTreeTable.getColumnModel().getColumn(1).setCellRenderer(new ANumbericCellRenderer());
+
+        ordersTreeTable.getColumnModel().getColumn(2).setPreferredWidth(40);
+        ordersTreeTable.getColumnModel().getColumn(2).setHeaderValue("Ед.изм.");
+
+        ordersTreeTable.getColumnModel().getColumn(3).setCellRenderer(new ANumbericCellRenderer());
+        ordersTreeTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+        ordersTreeTable.getColumnModel().getColumn(3).setHeaderValue("<html><body>Цена за ед.<br>товара</body></html>");
+
+
+        ordersTreeTable.getColumnModel().getColumn(4).setCellRenderer(new ANumbericCellRenderer());
+        ordersTreeTable.getColumnModel().getColumn(4).setHeaderValue("<html><body>Был реализован<br>на сумму</body></html>");
+        ordersTreeTable.getColumnModel().getColumn(4).setPreferredWidth(40);
+
+        datePicker.setDate(new Date());
+
+    }
+
+    /** This method is called from within the constructor to
+     * initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is
+     * always regenerated by the Form Editor.
+     */
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ordersTreeTable = new org.jdesktop.swingx.JXTreeTable();
+        jLabel3 = new javax.swing.JLabel();
+        selectOrdersButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        orderIdRadioButton = new javax.swing.JRadioButton();
+        orderIdFormattedTextField = new javax.swing.JFormattedTextField();
+        jPanel3 = new javax.swing.JPanel();
+        dateRadioButton = new javax.swing.JRadioButton();
+        datePicker = new org.jdesktop.swingx.JXDatePicker();
+        jPanel4 = new javax.swing.JPanel();
+        scodRadioButton = new javax.swing.JRadioButton();
+        scodTextField = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        forCustomerRadioButton = new javax.swing.JRadioButton();
+        customerNameTextField = new javax.swing.JTextField();
+        findCustomerToggleButton = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+
+        setName("Form"); // NOI18N
+
+        jScrollPane1.setName("jScrollPane1"); // NOI18N
+
+        ordersTreeTable.setName("ordersTreeTable"); // NOI18N
+        ordersTreeTable.getTableHeader().setReorderingAllowed(false);
+        ordersTreeTable.addTreeSelectionListener(new javax.swing.event.TreeSelectionListener() {
+            public void valueChanged(javax.swing.event.TreeSelectionEvent evt) {
+                ordersTreeTableValueChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(ordersTreeTable);
+
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(tradeterminal.TradeTerminalApp.class).getContext().getResourceMap(FindSellingOrder.class);
+        jLabel3.setText(resourceMap.getString("jLabel3.text")); // NOI18N
+        jLabel3.setName("jLabel3"); // NOI18N
+
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(tradeterminal.TradeTerminalApp.class).getContext().getActionMap(FindSellingOrder.class, this);
+        selectOrdersButton.setAction(actionMap.get("selectOrders")); // NOI18N
+        selectOrdersButton.setText(resourceMap.getString("selectOrdersButton.text")); // NOI18N
+        selectOrdersButton.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        selectOrdersButton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        selectOrdersButton.setName("selectOrdersButton"); // NOI18N
+
+        jPanel1.setName("jPanel1"); // NOI18N
+        jPanel1.setLayout(new java.awt.GridLayout(2, 2, 2, 2));
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setName("jPanel2"); // NOI18N
+        jPanel2.setLayout(new java.awt.BorderLayout(4, 4));
+
+        orderIdRadioButton.setAction(actionMap.get("setSelectByOrderId")); // NOI18N
+        buttonGroup1.add(orderIdRadioButton);
+        orderIdRadioButton.setSelected(true);
+        orderIdRadioButton.setName("orderIdRadioButton"); // NOI18N
+        jPanel2.add(orderIdRadioButton, java.awt.BorderLayout.PAGE_START);
+
+        orderIdFormattedTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
+        orderIdFormattedTextField.setText(resourceMap.getString("orderIdFormattedTextField.text")); // NOI18N
+        orderIdFormattedTextField.setName("orderIdFormattedTextField"); // NOI18N
+        jPanel2.add(orderIdFormattedTextField, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel2);
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel3.setName("jPanel3"); // NOI18N
+        jPanel3.setLayout(new java.awt.BorderLayout(4, 4));
+
+        dateRadioButton.setAction(actionMap.get("setSelectByDate")); // NOI18N
+        buttonGroup1.add(dateRadioButton);
+        dateRadioButton.setName("dateRadioButton"); // NOI18N
+        jPanel3.add(dateRadioButton, java.awt.BorderLayout.PAGE_START);
+
+        datePicker.setEnabled(false);
+        datePicker.setName("datePicker"); // NOI18N
+        datePicker.setPreferredSize(new java.awt.Dimension(180, 27));
+        jPanel3.add(datePicker, java.awt.BorderLayout.LINE_START);
+
+        jPanel1.add(jPanel3);
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel4.setName("jPanel4"); // NOI18N
+        jPanel4.setLayout(new java.awt.BorderLayout(4, 4));
+
+        scodRadioButton.setAction(actionMap.get("setSelectedByScod")); // NOI18N
+        buttonGroup1.add(scodRadioButton);
+        scodRadioButton.setName("scodRadioButton"); // NOI18N
+        jPanel4.add(scodRadioButton, java.awt.BorderLayout.PAGE_START);
+
+        scodTextField.setText(resourceMap.getString("scodTextField.text")); // NOI18N
+        scodTextField.setEnabled(false);
+        scodTextField.setName("scodTextField"); // NOI18N
+        jPanel4.add(scodTextField, java.awt.BorderLayout.CENTER);
+
+        jPanel1.add(jPanel4);
+
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel5.setName("jPanel5"); // NOI18N
+        jPanel5.setLayout(new java.awt.BorderLayout(4, 4));
+
+        forCustomerRadioButton.setAction(actionMap.get("setSelectedByCustomerId")); // NOI18N
+        buttonGroup1.add(forCustomerRadioButton);
+        forCustomerRadioButton.setText(resourceMap.getString("forCustomerRadioButton.text")); // NOI18N
+        forCustomerRadioButton.setName("forCustomerRadioButton"); // NOI18N
+        jPanel5.add(forCustomerRadioButton, java.awt.BorderLayout.PAGE_START);
+
+        customerNameTextField.setEditable(false);
+        customerNameTextField.setText(resourceMap.getString("customerNameTextField.text")); // NOI18N
+        customerNameTextField.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        customerNameTextField.setEnabled(false);
+        customerNameTextField.setName("customerNameTextField"); // NOI18N
+        jPanel5.add(customerNameTextField, java.awt.BorderLayout.CENTER);
+
+        findCustomerToggleButton.setAction(actionMap.get("findCustomer")); // NOI18N
+        findCustomerToggleButton.setName("findCustomerToggleButton"); // NOI18N
+        jPanel5.add(findCustomerToggleButton, java.awt.BorderLayout.LINE_END);
+
+        jPanel1.add(jPanel5);
+
+        jButton1.setAction(actionMap.get("showOrderInfo")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(selectOrdersButton, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
+                    .addComponent(jLabel3))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(selectOrdersButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+    }// </editor-fold>//GEN-END:initComponents
+    private int selectedOrderId = -1;
+
+    public int getSelectedOrderId() {
+        return selectedOrderId;
+    }
+
+    private void ordersTreeTableValueChanged(javax.swing.event.TreeSelectionEvent evt) {//GEN-FIRST:event_ordersTreeTableValueChanged
+
+        TreePath tp = ordersTreeTable.getTreeSelectionModel().getSelectionPath();
+
+        if (tp != null) {
+            Object o = tp.getLastPathComponent();
+
+            if (o != null) {
+                selectedOrderId = ((IGetOrderID) o).getOrderId();
+                System.out.println(selectedOrderId);
+
+
+            }
+        }
+
+    }//GEN-LAST:event_ordersTreeTableValueChanged
+
+    @Action
+    public void selectOrders() {
+        try {
+
+
+
+            int orderId = -1;
+            if (orderIdRadioButton.isSelected()) {
+                orderIdFormattedTextField.commitEdit();
+                orderId = ((Number) orderIdFormattedTextField.getValue()).intValue();
+            }
+
+            int customerId = -1;
+
+            OrderBy opType = OrderBy.SELECT_ORDER_ID;
+            if (orderIdRadioButton.isSelected()) {
+                opType = OrderBy.SELECT_ORDER_ID;
+
+            } else if (dateRadioButton.isSelected()) {
+                opType = OrderBy.SELECT_BY_DATE;
+
+            } else if (scodRadioButton.isSelected()) {
+                opType = OrderBy.SELECT_BY_SCOD;
+
+            } else if (forCustomerRadioButton.isSelected()) {
+                opType = OrderBy.SELECT_BY_CUSTOMER_ID;
+
+                customerId = selectedCustomer.getId();
+            }
+
+            dmodel.selectAndUpdate(orderId,
+                    opType, datePicker.getDate(), scodTextField.getText(), customerId);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(FindSellingOrder.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public boolean checkPanel() {
+
+        if (scodTextField.isFocusOwner()) {
+            return false;
+        }
+
+
+        if (selectedOrderId == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Вы не выбрати ниодной операции",
+                    "Ошибка ввода...",
+                    JOptionPane.WARNING_MESSAGE);
+
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void openPanel() {
+        orderIdFormattedTextField.requestFocus();
+    }
+
+    @Action
+    public void setSelectByOrderId() {
+        setSelectVisualisacion();
+    }
+
+    @Action
+    public void setSelectByDate() {
+        setSelectVisualisacion();
+    }
+
+    @Action
+    public void setSelectedByScod() {
+        setSelectVisualisacion();
+    }
+
+    @Action
+    public void setSelectedByCustomerId() {
+        setSelectVisualisacion();
+    }
+
+    private void setSelectVisualisacion() {
+
+        orderIdFormattedTextField.setEnabled(orderIdRadioButton.isSelected());
+        if (orderIdRadioButton.isSelected()) {
+            selectOrdersButton.setIcon(ic1);
+            selectOrdersButton.setText("По номеру");
+        }
+
+        datePicker.setEnabled(dateRadioButton.isSelected());
+        if (dateRadioButton.isSelected()) {
+            selectOrdersButton.setIcon(ic2);
+            selectOrdersButton.setText("По дате");
+        }
+
+
+        scodTextField.setEnabled(scodRadioButton.isSelected());
+        if (scodRadioButton.isSelected()) {
+            selectOrdersButton.setIcon(ic3);
+            selectOrdersButton.setText("По коду");
+        }
+
+
+        findCustomerToggleButton.setEnabled(forCustomerRadioButton.isSelected());
+        if (forCustomerRadioButton.isSelected()) {
+            selectOrdersButton.setIcon(ic4);
+
+            if (findDepsSelingOrders) {
+                selectOrdersButton.setText("По подразделению");
+            } else {
+                selectOrdersButton.setText("По клиенту");
+            }
+
+
+        }
+    }
+
+    @Action
+    public void findCustomer() {
+        if (findDepsSelingOrders) {
+            FindDepCustomerDPAnel p = new FindDepCustomerDPAnel();
+
+            AUniversalDialog d = new AUniversalDialog(p, null, true);
+
+            d.setTitleIcon(new javax.swing.ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/polzovatel.png")));
+            d.setTitle("Поиск подразделения");
+            d.setTitleText("Поиск подразделения");
+
+            d.setVisible(true);
+            d.dispose();
+
+            if (d.getReturnStatus() == ADialog.RET_OK) {
+
+                selectedCustomer = new SelectedCustomer(p.getSelectedId(), p.getCustomerShortName());
+                customerNameTextField.setText(selectedCustomer.getShortName());
+
+            }
+        } else {
+            FindCustomerDPAnel p = new FindCustomerDPAnel();
+
+            AUniversalDialog d = new AUniversalDialog(p, null, true);
+
+            d.setTitleIcon(new javax.swing.ImageIcon(getClass().getResource("/tradeterminal/icons/TT_icons/32X32/polzovatel.png")));
+            d.setTitle("Поиск клиента");
+            d.setTitleText("Поиск клиента");
+
+            d.setVisible(true);
+            d.dispose();
+
+            if (d.getReturnStatus() == ADialog.RET_OK) {
+
+                selectedCustomer = new SelectedCustomer(p.getSelectedId(), p.getCustomerShortName());
+                customerNameTextField.setText(selectedCustomer.getShortName());
+
+            }
+        }
+    }
+
+    @Action
+    public void showOrderInfo() {
+        OrderInfoM2.showOpInfo(selectedOrderId);
+    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.JTextField customerNameTextField;
+    private org.jdesktop.swingx.JXDatePicker datePicker;
+    private javax.swing.JRadioButton dateRadioButton;
+    private javax.swing.JButton findCustomerToggleButton;
+    private javax.swing.JRadioButton forCustomerRadioButton;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JFormattedTextField orderIdFormattedTextField;
+    private javax.swing.JRadioButton orderIdRadioButton;
+    private org.jdesktop.swingx.JXTreeTable ordersTreeTable;
+    private javax.swing.JRadioButton scodRadioButton;
+    private javax.swing.JTextField scodTextField;
+    private javax.swing.JButton selectOrdersButton;
+    // End of variables declaration//GEN-END:variables
+}
+
+class OrdersModel extends DefaultTreeTableModel {
+
+    boolean findDepsSelingOrders = false;
+    //private Object root = new Object(); // <---- Удивительный прикол
+    //DefaultMutableTreeTableNode root = new DefaultMutableTreeTableNode();
+    List<OrderNode> nodes = new ArrayList<OrderNode>();
+    DefaultMutableTreeTableNode root;
+
+    public OrdersModel(boolean findDepsSelingOrders) {
+        super(new DefaultMutableTreeTableNode());
+
+        this.findDepsSelingOrders = findDepsSelingOrders;
+        root = (DefaultMutableTreeTableNode) getRoot();
+    }
+
+    public enum OrderBy {
+
+        SELECT_ORDER_ID,
+        SELECT_BY_DATE,
+        SELECT_BY_SCOD,
+        SELECT_BY_CUSTOMER_ID
+    }
+
+    public void selectAndUpdate(int orderId,
+            OrderBy selectType,
+            Date date,
+            String scod,
+            int customerId) {
+
+        System.out.println(orderId);
+
+        for (OrderNode node : nodes) {
+            this.removeNodeFromParent(node);
+        }
+
+        nodes.clear();
+
+        Connection conn = null;
+
+        CallableStatement proc;
+        try {
+            conn = Setup.getSource().getConnection();
+            conn.setAutoCommit(false);
+
+            switch (selectType) {
+                case SELECT_ORDER_ID:
+                    proc = conn.prepareCall("{ ? = call select_selling_orders_and_products_by_order_id(?,?) }");
+                    proc.registerOutParameter(1, Types.OTHER);
+                    proc.setInt(2, orderId);
+                    proc.setBoolean(3, findDepsSelingOrders);
+
+                    break;
+                case SELECT_BY_DATE:
+                    proc = conn.prepareCall("{ ? = call select_selling_orders_and_products_by_date(?,?) }");
+                    proc.registerOutParameter(1, Types.OTHER);
+                    proc.setObject(2, date, Types.DATE);
+                    proc.setBoolean(3, findDepsSelingOrders);
+
+                    break;
+                case SELECT_BY_SCOD:
+                    proc = conn.prepareCall("{ ? = call select_selling_orders_and_products_by_scod(?,?) }");
+                    proc.registerOutParameter(1, Types.OTHER);
+                    proc.setString(2, scod);
+                    proc.setBoolean(3, findDepsSelingOrders);
+
+                    break;
+                case SELECT_BY_CUSTOMER_ID:
+                    proc = conn.prepareCall("{ ? = call select_selling_orders_and_products_by_customer_id(?,?) }");
+                    proc.registerOutParameter(1, Types.OTHER);
+                    proc.setInt(2, customerId);
+                    proc.setBoolean(3, findDepsSelingOrders);
+
+                    break;
+                default:
+                    return;
+
+            }
+
+
+            proc.execute();
+
+            ResultSet resultSet = (ResultSet) proc.getObject(1);
+
+            List<ReturnProductRowNode> productNodes = new ArrayList<ReturnProductRowNode>();
+
+            while (resultSet.next()) {
+
+                OrderNode oNode = new OrderNode(resultSet.getInt(1), resultSet.getTimestamp(2));
+
+                Boolean fn = false;
+                for (OrderNode n : nodes) {
+                    if (n.getId() == oNode.getId()) {
+                        fn = true;
+                    }
+                }
+
+                if (!fn) {
+                    nodes.add(oNode);
+                    this.insertNodeInto(oNode, root, 0);//insertNodeInto(oNode, root, 0);
+                }
+
+
+                productNodes.add(new ReturnProductRowNode(
+                        resultSet.getInt(1),
+                        resultSet.getInt(3),
+                        resultSet.getInt(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getDouble(8),
+                        resultSet.getInt(9),
+                        resultSet.getString(10),
+                        resultSet.getDouble(11)));
+            }
+
+            for (OrderNode on : nodes) {
+                int index = 1;
+
+                for (ReturnProductRowNode pn : productNodes) {
+                    if (pn.getOrderId() == on.getId()) {
+                        on.addReturnProductRowNode(pn);
+                        this.insertNodeInto(pn, on, 0);
+                        pn.setRowIndex(index++);
+                    }
+
+                }
+            }
+
+            resultSet.close();
+            proc.close();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(FindSellingOrder.class.getName()).log(Level.SEVERE, null, ex);
+
+            AErrorDialog der = new AErrorDialog("Ошибка SQL уровня...", ex.getMessage());
+            der.setVisible(true);
+            der.dispose();
+
+            try {
+                conn.rollback();
+                // log error
+            } catch (SQLException ex1) {
+                Logger.getLogger(FindSellingOrder.class.getName()).log(Level.SEVERE, null, ex1);
+
+                AErrorDialog der2 = new AErrorDialog("Ошибка SQL уровня...", ex1.getMessage());
+                der2.setVisible(true);
+                der2.dispose();
+
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(FindSellingOrder.class.getName()).log(Level.SEVERE, null, ex);
+
+            AErrorDialog der = new AErrorDialog("Ошибка...", ex.getMessage());
+            der.setVisible(true);
+            der.dispose();
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException ex2) {
+                    Logger.getLogger(FindSellingOrder.class.getName()).log(Level.SEVERE, null, ex2);
+
+                    AErrorDialog der = new AErrorDialog("Ошибка SQL уровня...", ex2.getMessage());
+                    der.setVisible(true);
+                    der.dispose();
+                }
+            }
+        }
+    }
+
+//    @Override
+//    public Object getChild(Object parent, int index) {
+//        if (parent == null && index == 0) {
+//            return root;
+//        }
+//
+//        if (root.equals(parent)) {
+//            return nodes.get(index);
+//        }
+//
+//        if (nodes.contains(parent)) {
+//            return ((OrderNode) parent).getReturnProductRowNode(index);
+//        }
+//
+//
+//        return null;
+//    }
+//    @Override
+//    public int getChildCount(Object parent) {
+//        if (parent == null) {
+//            return 1;
+//        }
+//
+//        if (root.equals(parent)) {
+//            return nodes.size();
+//        }
+//
+//        if (nodes.contains(parent)) {
+//            return ((OrderNode) parent).getReturnProductRowNodesCount();
+//        }
+//
+//        return 0;
+//    }
+    @Override
+    public int getHierarchicalColumn() {
+        return 0;
+    }
+
+    @Override
+    public int getColumnCount() {
+        return 5;
+    }
+
+//    @Override
+//    public int getIndexOfChild(Object parent, Object child) {
+//        if (parent == null) {
+//            return 0;
+//        }
+//
+//        if (root.equals(parent)) {
+//            return nodes.indexOf(child);
+//        }
+//
+//        if (nodes.contains(parent)) {
+//            return ((OrderNode) parent).getReturnProductRowNodeIndex(child);
+//        }
+//        return 0;
+//    }
+    public int getOrderId(Object o) {
+        if (root.equals(o)) {
+            return -1;
+        }
+
+        return ((IGetOrderID) o).getOrderId();
+    }
+
+    @Override
+    public Class<?> getColumnClass(int column) {
+        switch (column) {
+            case 0:
+                return String.class;
+            default:
+                return Object.class;
+        }
+    }
+
+    @Override
+    public Object getValueAt(Object node, int column) {
+
+        if (node instanceof OrderNode || node instanceof ReturnProductRowNode) {
+            IGetColimnValue inod = (IGetColimnValue) node;
+            //System.out.println(inod.toString());
+
+            switch (column) {
+                case 0:
+                    return inod.getName();
+                case 1:
+                    return inod.getQuantity() == 0 ? null : inod.getQuantity();
+                case 2:
+                    return inod.getMeasuresName();
+                case 3:
+                    return inod.getActualPrice();
+                case 4:
+                    return inod.getOutputPrice();
+            }
+        }
+
+
+        return 1;
+    }
+}
+
+interface IGetOrderID {
+
+    public int getOrderId();
+}
+
+interface IGetColimnValue {
+
+    public String getName();
+
+    public double getQuantity();
+
+    public String getMeasuresName();
+
+    public double getActualPrice();
+
+    public double getOutputPrice();
+}
+
+class OrderNode extends DefaultMutableTreeTableNode implements IGetOrderID, IGetColimnValue {
+
+    DateFormat df = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault());
+    private Date orderDate;
+    private int orderId = 1;
+    private double actualPrice = 0;
+    private double outputPrice = 0;
+    private List<ReturnProductRowNode> subNodes = new ArrayList<ReturnProductRowNode>();
+
+    public List<ReturnProductRowNode> getSubNodes() {
+        return subNodes;
+    }
+
+    public OrderNode(int orderNumber,
+            Date orderDate) {
+
+        this.orderId = orderNumber;
+        this.orderDate = orderDate;
+    }
+
+    // Обновить вид
+//    protected void updateView() {
+//        // Обновляем значение порядкового номера записи
+//
+//
+//
+//        set(0, orderId + " [" + df.format(orderDate) + "]");
+//    //set(1, null);
+//
+//    //set(3, actualPrice);
+//    //set(4, outputPrice);
+//
+//    }
+    public void addReturnProductRowNode(ReturnProductRowNode node) {
+        subNodes.add(node);
+
+        actualPrice += node.getActualPrice();
+        outputPrice += node.getOutputPrice();
+    }
+
+    public ReturnProductRowNode getReturnProductRowNode(int index) {
+        return subNodes.get(index);
+    }
+
+    public int getReturnProductRowNodeIndex(Object o) {
+        return subNodes.indexOf(o);
+    }
+
+    public int getReturnProductRowNodesCount() {
+        return subNodes.size();
+    }
+
+    public int getId() {
+        return orderId;
+    }
+
+    @Override
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public Date getOrderDate() {
+        return orderDate;
+    }
+
+    @Override
+    public double getActualPrice() {
+        return actualPrice;
+    }
+
+    @Override
+    public double getOutputPrice() {
+        return outputPrice;
+    }
+
+    @Override
+    public String toString() {
+        return orderId + " [" + df.format(orderDate) + "]";
+    }
+
+    @Override
+    public double getQuantity() {
+        return 0;
+    }
+
+    @Override
+    public String getName() {
+        return orderId + " [" + df.format(orderDate) + "]";
+    }
+
+    @Override
+    public String getMeasuresName() {
+        return null;
+    }
+}
+
+class ReturnProductRowNode extends DefaultMutableTreeTableNode implements IGetOrderID, IGetColimnValue {
+
+    protected int rowIndex;
+    protected int id;
+    protected int orderId;
+    protected int productsGroupsId;
+    protected String name;
+    protected String description;
+    protected String scod;
+    protected double quantity;
+    protected int measuresId;
+    protected String measuresName;
+    protected double actualPrice;
+    protected double outputPrice;
+    //public static int NODE_SIZE = 5;
+
+    public ReturnProductRowNode(
+            int orderId,
+            int productsGroupsId,
+            int id,
+            String name,
+            String description,
+            String scod,
+            double quantity,
+            int measuresId,
+            String measuresName,
+            double actualPrice) {
+        // super(NODE_SIZE);
+
+//        o.id,
+//        o.order_date,
+//        i.products_id,
+//        p.products_groups_id,
+//        
+//        p."name" as product_name,
+//        p.description,
+//        p.scod,
+//        i.quantity,
+//        p.measures_id, 
+//        m."name" as quantityName,
+//        i.actual_price
+
+        // Инициализируем поля
+        this.orderId = orderId;
+        this.productsGroupsId = productsGroupsId;
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.scod = scod;
+        this.quantity = quantity;
+        this.measuresId = measuresId;
+        this.measuresName = measuresName;
+        this.actualPrice = actualPrice;
+
+
+        outputPrice = quantity * actualPrice;
+
+//        for (int i = 0; i < ReturnProductRowNode.NODE_SIZE; i++) {
+//            add(i, null);
+//        }
+//        updateView();
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    // Обновить вид
+//    protected void updateView() {
+//
+//        // Обновляем значение порядкового номера записи
+//        set(0, "<html><body>" + rowIndex + " <b>" + name + "</b><br>код: <b>" + scod + "</b></body></html>");
+//        // Текперь устанавливаем логическое содержимое
+//        //set(1, name);
+//        //set(2, description);
+//        //set(3, scod);
+//        set(1, quantity);
+//        set(2, measuresName);
+//        set(3, actualPrice);
+//        set(4, outputPrice);
+//    //set(8, returnedQuantity);
+//
+//    //set(9, currentReturnedQuantity);
+//    //set(10, currentReturnedSumm);
+//    }
+    public int getRowIndex() {
+        return rowIndex;
+    }
+
+    public void setRowIndex(int rowIndex) {
+        this.rowIndex = rowIndex;
+        //updateView();
+    }
+
+    @Override
+    public double getActualPrice() {
+        return actualPrice;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getMeasuresId() {
+        return measuresId;
+    }
+
+    @Override
+    public String getMeasuresName() {
+        return measuresName;
+    }
+
+    @Override
+    public String getName() {
+        return "<html><body>" + rowIndex + " <b>" + name + "</b><br>код: <b>" + scod + "</b></body></html>";
+    }
+
+    @Override
+    public int getOrderId() {
+        return orderId;
+    }
+
+    @Override
+    public double getOutputPrice() {
+        return outputPrice;
+    }
+
+    public int getProductsGroupsId() {
+        return productsGroupsId;
+    }
+
+    @Override
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public String getScod() {
+        return scod;
+    }
+}

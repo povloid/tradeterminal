@@ -1,0 +1,94 @@
+export JAVA_HOME=/opt/jdk7
+
+
+cd TTIReportM4
+mvn clean install
+cd ../
+
+cd TradeTerminalM4
+mvn clean install
+cd ../
+
+
+
+cd TTRAPSLDynamicBar3DPlotM4
+mvn clean install
+cd ../
+
+cd TTRAPSLUsersProgressM4
+mvn clean install
+cd ../
+
+cd TTRCustomerHistoryM4
+mvn clean install
+cd ../
+
+cd TTROrdersHistoryM4
+mvn clean install
+cd ../
+
+cd TTRProductMovingM4
+mvn clean install
+cd ../
+
+cd TTRProductMovingA3M4
+mvn clean install
+cd ../
+
+cd TTRProductMovingV2M4
+mvn clean install
+cd ../
+
+cd TTRProductsQantitysM4
+mvn clean install
+cd ../
+
+cd TTRPSLForDateM4
+mvn clean install
+cd ../
+
+cd TTRTovOborForDateScodeM4
+mvn clean install
+cd ../
+
+cd TTRZReportM4
+mvn clean install
+cd ../
+
+cd TTRZOBForDateM4
+mvn clean install
+cd ../
+
+cd TTRSchetFactura
+mvn clean install
+cd ../
+
+cd TTRSchetNaOpl
+mvn clean install
+cd ../
+
+cd TTRNakl
+mvn clean install
+cd ../
+
+cd TTRTop
+mvn clean install
+cd ../
+
+cd TTRPrib
+mvn clean install
+cd ../
+
+rm -f preinstall_TT/TT/lib/*.*
+rm -f preinstall_TT/TT/reports/*.*
+
+#cp -v TTR*/target/*.jar TradeTerminalM4/non-packaged-resources/reports/
+cp -v TTR*/target/*.jar preinstall_TT/TT/reports/
+
+cp -vr InstallDBM4/target/InstallDBM4*.jar preinstall_TT/TT/InstallDB.jar
+cp -vr InstallDBM4/target/lib preinstall_TT/TT
+
+cp -vr TradeTerminalM4/target/TradeTerminalM4*.jar preinstall_TT/TT/TradeTerminal.jar
+cp -vr TradeTerminalM4/target/lib preinstall_TT/TT
+
+#cp -vr TradeTerminalM4/target/reports/ preinstall_TT/TT

@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="oinfo" pageWidth="158" pageHeight="821" columnWidth="142" leftMargin="8" rightMargin="8" topMargin="8" bottomMargin="8" uuid="db079689-546f-4720-a581-16113c96173d">
+	<property name="ireport.zoom" value="2.657341500000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F5F5DC">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#FFFFBF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean($V{REPORT_COUNT}.intValue()%2==0)]]></conditionExpression>
+			<style backcolor="#FFFFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="f917e349-e442-491b-9158-94e0ee8e6020"/>
+	<parameter name="CAPTION_TEXT" class="java.lang.String"/>
+	<parameter name="HEAD_TEXT" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select  -- Сведения по операции
+	o.id as oder_id,
+	o.order_date as order_date,
+	o.operation_type_code as operation_type_code,
+	ot.description as order_operation_name,
+
+	o.description as order_description,
+	o.sub_order_id as sub_order_id,
+
+	-- Сведения по пользователю
+	o.user_id as user_id,
+	u."name" as user_name,
+	u.isadmin as isadmin,
+	(case when(u.isadmin is true) then 'да' else 'нет' end ) as isadmin_ru,
+	u.description as user_description,
+
+	-- Сведения по проведенной операции
+	o.credit as credit,
+	(case when(o.credit is true) then 'да' else 'нет' end ) as credit_ru,
+	(select abs(sum(ii.actual_price * ii.quantity))
+		from items ii WHERE ii.orders_id = o.id) as to_cass,
+	(cb.summ) as to_balance,
+	cb.description as to_balance_description,
+
+	-- Сведения по клиенту
+	o.customer_id,
+	----------
+	c.short_name,
+	c.doc_type,
+	c.doc,
+	c.ur,
+	(case when(c.ur is true) then 'да' else 'нет' end ) as ur_ru,
+	----------
+	c.fio,
+	c.sex,
+	c.address,
+	c.phone_number,
+	c.phone_number_2,
+	c.email,
+	c.description as customer_description,
+
+	-- Сведения по составу операции
+	-- Группа товаров
+	p.products_groups_id,
+	(case when (pg."name" is null) then 'сумма' else pg."name" end) as products_groups_name,
+	pg.description as products_groups_description,
+	-- Товар
+	i.products_id,
+	(case when (p."name" is null) then 'Касса' else p."name" end) as product_name,
+	p.scod,
+	p.measures_id,
+	ms."name" as measures_name,
+	p.description as product_description,
+
+	-- Оценка
+	i.actual_price,
+	i.quantity,
+	i.actual_price * i.quantity AS summ
+
+	from orders o
+		LEFT OUTER JOIN customers c ON (o.customer_id = c.id )
+		LEFT OUTER JOIN customers_balances cb ON (o.id = cb.order_id),
+
+	     items i
+		LEFT OUTER JOIN products p ON (i.products_id = p.id )
+		LEFT OUTER JOIN products_groups pg ON (p.products_groups_id = pg.id)
+		LEFT OUTER JOIN rb_measures ms ON (p.measures_id = ms.id)
+
+		,orders_operations_types ot, users u
+	where
+		--o.id = 396 -- ppl Приход товара
+		--o.id = 527 -- pmn Списание товара
+
+		--o.id = 563 --mpl
+		--o.id = 546 --mmn
+
+		--o.id = 539 -- z
+
+		--o.id = 562 --psl Продажа товара с кредитом
+		--o.id = 567 --prt Возврат товара без балансных операций
+		--o.id=7388
+		o.id=618
+		AND o.id=i.orders_id AND o.operation_type_code = type_code
+		AND o.user_id = u.id --AND p.id is not null
+		AND i.actual_price >= 0]]>
+	</queryString>
+	<field name="oder_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="order_date" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="operation_type_code" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="order_operation_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="order_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sub_order_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="user_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="user_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="isadmin" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="isadmin_ru" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="user_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="credit" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="credit_ru" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="to_cass" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="to_balance" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="to_balance_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="short_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc_type" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="doc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ur" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ur_ru" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fio" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="sex" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="address" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="phone_number" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="phone_number_2" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="customer_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="products_groups_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="products_groups_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="products_groups_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="products_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="product_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="scod" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="measures_id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="measures_name" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="product_description" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="actual_price" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="quantity" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="summ" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="sum_op" class="java.lang.Number" calculation="Sum">
+		<variableExpression><![CDATA[$F{summ}]]></variableExpression>
+	</variable>
+	<group name="oder_id">
+		<groupExpression><![CDATA[$F{oder_id}]]></groupExpression>
+		<groupHeader>
+			<band height="3"/>
+			<band height="31">
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement positionType="Float" mode="Opaque" x="32" y="20" width="102" height="10" isPrintWhenDetailOverflows="true" uuid="e6f26ecc-0be9-4ecf-8ae5-f0ab53fc89a2"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{order_operation_name}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+					<reportElement positionType="Float" mode="Opaque" x="32" y="10" width="102" height="10" isPrintWhenDetailOverflows="true" uuid="eed3e4c3-8356-47e9-ac87-cf02bf2ae32f"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{order_date}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="10" width="32" height="10" uuid="9ac139e1-9f7e-4aea-bb34-cb52b0e9aee0"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Дата:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="20" width="32" height="10" uuid="c602f468-7f00-4951-993c-55eba6a08342"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[оп.:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="32" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="b6808766-cb7e-4ffa-b17e-333489b6df0f"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Оп.№]]></text>
+				</staticText>
+				<textField>
+					<reportElement positionType="Float" mode="Opaque" x="32" y="0" width="102" height="10" forecolor="#000000" backcolor="#FFFFFF" uuid="ff169375-c842-4313-8c8b-08fab094425b"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.0" lineStyle="Solid"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="7" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{oder_id}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="products_groups_id">
+		<groupExpression><![CDATA[$F{products_groups_id}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="45">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="19" width="142" height="26" uuid="7a62c870-a5e8-489c-85f6-27a4e0d65f5f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CAPTION_TEXT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="142" height="19" uuid="a5e7e414-11be-4c7a-bd02-9f69bf22f565"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{HEAD_TEXT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="30">
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="142" height="10" uuid="d87c379d-7641-48e3-9b1a-d535af304791"/>
+				<box>
+					<topPen lineWidth="0.5" lineStyle="Dashed"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="44" y="10" width="23" height="10" uuid="fcfb2b1d-11e7-4bbd-8065-9433a321d67e"/>
+				<box leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{measures_name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="75" y="10" width="67" height="10" uuid="925cb087-3c33-4c70-9c73-001f2eb9ade9"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{actual_price}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.000;-###0.000" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="10" width="44" height="10" uuid="24a9ef88-8214-4df9-9ce7-f747f4e8d1ef"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="false">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="20" width="142" height="10" uuid="9908b3fc-e020-4b27-a71b-00d89b9e3b0b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{summ}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="67" y="10" width="8" height="10" uuid="b465f80f-4f96-4df6-8f9d-7cd33793a2b2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[X]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band/>
+	</pageFooter>
+	<summary>
+		<band height="22">
+			<staticText>
+				<reportElement x="0" y="0" width="44" height="22" uuid="6dfc54c5-b613-41a8-a299-76e1fc3b8491"/>
+				<box>
+					<pen lineWidth="0.75" lineStyle="Dashed"/>
+					<topPen lineWidth="1.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ИТОГ:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToBandHeight" x="44" y="0" width="98" height="22" uuid="53e6b7a7-3b5b-46ec-83a3-8e245a02c064"/>
+				<box>
+					<pen lineWidth="0.75" lineStyle="Dashed"/>
+					<topPen lineWidth="1.5" lineStyle="Dashed"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{sum_op}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

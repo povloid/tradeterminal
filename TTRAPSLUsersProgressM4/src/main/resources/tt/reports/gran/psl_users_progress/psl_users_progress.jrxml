@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e73e7c35-f88a-4206-b6e9-67947eb42004">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#FFFFFF" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<subDataset name="PieChartDataset" uuid="90cc8408-6d7e-4169-9457-b50c00ac010f"/>
+	<parameter name="CAPTION_PARAMS" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT u."name", sum(i.actual_price * i.quantity)
+   FROM orders o, items i, users u
+  WHERE o.id = i.orders_id
+	AND o.operation_type_code='psl'
+	AND u.id = o.user_id
+  GROUP BY u."name" ORDER BY sum DESC;]]>
+	</queryString>
+	<field name="name" class="java.lang.String"/>
+	<field name="sum" class="java.math.BigDecimal"/>
+	<variable name="SUMM" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{sum}]]></variableExpression>
+	</variable>
+	<group name="g1">
+		<groupFooter>
+			<band height="50">
+				<staticText>
+					<reportElement uuid="979e4d6c-de01-4d09-9f7a-d95ff823b4ed" style="Column header" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="229" y="0" width="227" height="20" forecolor="#000000" backcolor="#CCFFFF"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<text><![CDATA[На общ. сумму]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="true">
+					<reportElement uuid="a9042819-0612-43fe-a99d-a26dece4745e" style="Detail" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="456" y="0" width="97" height="20" backcolor="#CCFFFF"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.25" lineStyle="Solid"/>
+						<leftPen lineWidth="0.25" lineStyle="Solid"/>
+						<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+						<rightPen lineWidth="0.25" lineStyle="Solid"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMM}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="802" splitType="Stretch">
+			<pie3DChart>
+				<chart isShowLegend="true" evaluationTime="Report" renderType="draw" theme="default">
+					<reportElement uuid="aa478910-5b43-45b7-bdce-d40b59ff9a1a" x="0" y="141" width="227" height="144"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<pieDataset>
+					<keyExpression><![CDATA[$F{name}]]></keyExpression>
+					<valueExpression><![CDATA[$F{sum}]]></valueExpression>
+					<labelExpression><![CDATA[$F{name}]]></labelExpression>
+				</pieDataset>
+				<pie3DPlot>
+					<plot backgroundAlpha="0.5" foregroundAlpha="0.8"/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF">
+						<font size="5"/>
+					</itemLabel>
+				</pie3DPlot>
+			</pie3DChart>
+		</band>
+	</background>
+	<title>
+		<band height="94" splitType="Stretch">
+			<textField>
+				<reportElement uuid="43e68f86-7769-47b7-9c15-ea6aed2e0195" style="SubTitle" x="0" y="65" width="553" height="29"/>
+				<textElement textAlignment="Left" markup="none">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CAPTION_PARAMS}]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement uuid="7a532b91-9f59-487b-8104-146e95d24d13" mode="Opaque" x="-20" y="0" width="595" height="65" forecolor="#006699" backcolor="#FFFFFF"/>
+				<staticText>
+					<reportElement uuid="eb4b82e4-fbf2-4dcd-aff1-efcc32706e80" style="Title" x="20" y="0" width="553" height="65" forecolor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="28" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Прогресс сумм продаж ]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="03d2ca5c-5d97-4b79-b9f4-ec8f39cb85e1" style="Column header" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="456" y="0" width="97" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[сумма]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4acbd52b-8a4f-497b-870b-6411d3cdd605" style="Column header" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="267" y="0" width="189" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[пользователь]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8519d33f-0ba0-4ba6-9fc7-e3d688cb54bb" style="Column header" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="229" y="0" width="38" height="20" forecolor="#000000" backcolor="#CCCCCC"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[№]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="88aaf0de-3377-4f74-8b6f-71831c2466a5" style="Detail" positionType="Float" stretchType="RelativeToBandHeight" x="267" y="0" width="189" height="18"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00" isBlankWhenNull="true">
+				<reportElement uuid="950ad78d-a034-43dd-ba3f-750914cd0cbc" style="Detail" positionType="Float" stretchType="RelativeToBandHeight" x="456" y="0" width="97" height="18"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sum}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0;-###0" isBlankWhenNull="true">
+				<reportElement uuid="46e5d3ab-d410-4556-ad4f-bac232d9d718" style="Detail" positionType="Float" stretchType="RelativeToBandHeight" x="229" y="0" width="38" height="18"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="13" splitType="Stretch">
+			<frame>
+				<reportElement uuid="0fc5f784-4af6-424d-9e38-cfbd301ce1f0" mode="Opaque" x="2" y="0" width="555" height="13" forecolor="#D0B48E" backcolor="#FFFFFF"/>
+				<textField evaluationTime="Report">
+					<reportElement uuid="3ba64a24-3945-40ee-9c6d-b93617bdec46" style="Column header" x="513" y="0" width="38" height="13" forecolor="#999999"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="08e7efc1-6fb6-422b-8252-02e3e3be98ee" style="Column header" x="433" y="0" width="80" height="13" forecolor="#999999"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}+" из"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement uuid="fab82dfc-5da9-4935-8890-eb5fe574fb6e" style="Column header" x="2" y="0" width="197" height="13" forecolor="#999999"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

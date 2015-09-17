@@ -1,0 +1,9 @@
+tt.reports.ttrtop.TTRTop;Товар;Лидер продаж
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Лидер продаж<b></h1>
+        Топ продаж
+    </body>
+</html>

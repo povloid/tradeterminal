@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nakl" language="groovy" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="86d304d1-7f70-4e47-8794-4917a1978f7b">
+	<property name="ireport.zoom" value="0.9330147604194666"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="39"/>
+	<parameter name="date" class="java.util.Date"/>
+	<parameter name="orderId" class="java.lang.Integer"/>
+	<parameter name="userLogin" class="java.lang.String"/>
+	<parameter name="userDescription" class="java.lang.String"/>
+	<parameter name="appClientName" class="java.lang.String"/>
+	<parameter name="appClientPhones" class="java.lang.String"/>
+	<parameter name="appClientAddress" class="java.lang.String"/>
+	<parameter name="appClientDescription" class="java.lang.String"/>
+	<parameter name="pslClientId" class="java.lang.Integer"/>
+	<parameter name="pslClientName" class="java.lang.String"/>
+	<parameter name="pslClientInfo" class="java.lang.String"/>
+	<parameter name="CAPTION_DESCRIPTION" class="java.lang.String"/>
+	<parameter name="CAPTION" class="java.lang.String"/>
+	<parameter name="PAGE_FUTTER_TEXT" class="java.lang.String"/>
+	<parameter name="dbName" class="java.lang.String"/>
+	<parameter name="dbDescription" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="csode" class="java.lang.String"/>
+	<field name="priceForUnit" class="java.lang.Double"/>
+	<field name="quantity" class="java.lang.Double"/>
+	<field name="measure" class="java.lang.String"/>
+	<variable name="SUMM" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{priceForUnit}*$F{quantity}]]></variableExpression>
+	</variable>
+	<variable name="SUMM_ALL" class="java.lang.Double" incrementType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$V{SUMM}]]></variableExpression>
+	</variable>
+	<group name="G1" isStartNewPage="true">
+		<groupFooter>
+			<band height="17">
+				<textField pattern="###0.00;-###0.00">
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="430" y="0" width="125" height="16" backcolor="#CCFFFF" uuid="d2832829-f05c-447f-86f0-90954a473653"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{SUMM_ALL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="430" height="16" backcolor="#CCFFFF" uuid="a4f2149a-bbea-4574-a649-f44f2f82bad2"/>
+					<box leftPadding="2" rightPadding="2">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[На общую сумму:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="264">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#FFFFFF" uuid="31c1c42a-1b1a-4564-bff2-c9ea43ff011b"/>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="20" y="50" width="555" height="42" uuid="99dffa44-8faa-4384-8a7f-7577a7134e07"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{CAPTION_DESCRIPTION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="20" y="20" width="555" height="30" uuid="bd73174d-b641-421d-9baa-3ded612e5cef"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{CAPTION}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<elementGroup>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="72" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="f10422fb-6b81-438f-9923-2089d7d0d351"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Операция №]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="72" width="434" height="15" uuid="27891f1e-c408-422e-9278-82928d8804d4"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{orderId}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="87" width="434" height="15" uuid="abf8d3c3-9396-47d8-95d8-7be4f3a42a7c"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{date}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="87" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="a3e24fbc-86d5-440b-9219-765ce7420901"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Дата операции:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="102" width="434" height="15" uuid="c73783e8-33c8-4769-8466-59aab8e78d90"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{userLogin}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" mode="Transparent" x="0" y="102" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="69c6fa70-76c9-4f43-95d4-784084ef084e"/>
+					<textElement textAlignment="Right">
+						<font size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Пользователь:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="117" width="434" height="15" uuid="2f763c20-80d6-480c-9ce8-e7d89ca8925f"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{userDescription}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="117" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="2015d378-ee07-4ff6-a41d-b82272540b83"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Описание:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="161" width="434" height="13" uuid="cbdd4ed5-1a20-4c15-bf42-02ad6dd83715"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{appClientName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="161" width="121" height="13" isPrintWhenDetailOverflows="true" uuid="ef8748cf-51c0-48e7-9125-e114aeb79e93"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Раб. место:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="102" width="434" height="15" uuid="6275bacb-19c6-4fe8-a57e-4de69fef5450"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{userLogin}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="102" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="8193465e-44fb-41c7-b0a8-127927c12a94"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Пользователь:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="174" width="434" height="15" uuid="d0da9361-3e3d-4230-96be-2bb0460a8467"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{appClientPhones}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="174" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="51b952b7-9178-4c0b-999a-5c85af741ccb"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Телефоны:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="189" width="434" height="14" uuid="6976cbab-d6da-4734-b146-1918e136e70e"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{appClientAddress}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="189" width="121" height="14" isPrintWhenDetailOverflows="true" uuid="4c317b08-179b-4608-8797-52fd7a7fa11d"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Адрес:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="218" width="434" height="15" uuid="edeaba36-0582-45dc-b386-1bcbd548b61a"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{pslClientId}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="218" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="c219483c-7652-46fb-a6be-7274a770ba56"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Подразделение №:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="203" width="434" height="15" uuid="43f22995-9963-4909-86e0-30c709566fc1"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{appClientDescription}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="203" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="e83dec2e-2f3d-4f87-81f5-4cfc9b3f7a3d"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Описание:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="233" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="63e547f1-8051-4da5-8868-692635824bc4"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Подразделение:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="233" width="434" height="15" uuid="989ec239-6ee8-4d6f-9670-3bd5f9fbecb6"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{pslClientName}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="248" width="434" height="14" uuid="62c79df9-e2e9-4695-b569-24532406a97b"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{pslClientInfo}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="248" width="121" height="14" isPrintWhenDetailOverflows="true" uuid="ee6e25d0-4746-4520-b373-624c82495cde"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Описание:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="132" width="434" height="15" uuid="b1bf50e6-dce4-494c-819b-40b642e9c261"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{dbName}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="132" width="121" height="15" isPrintWhenDetailOverflows="true" uuid="eb353a48-de1a-4f13-92b9-394e7b87e500"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[База данных:]]></text>
+				</staticText>
+			</elementGroup>
+			<elementGroup>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" x="121" y="147" width="434" height="14" uuid="f60f77c2-fec4-4bdc-8c0b-4f59fc9d652f"/>
+					<textElement>
+						<font fontName="DejaVu Sans Mono" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{dbDescription}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="147" width="121" height="14" isPrintWhenDetailOverflows="true" uuid="c0a60e2e-b676-4a8f-bf99-f69873215a90"/>
+					<textElement textAlignment="Right">
+						<font fontName="DejaVu Sans Mono" size="8" isBold="true" isStrikeThrough="false"/>
+					</textElement>
+					<text><![CDATA[Описание:]]></text>
+				</staticText>
+			</elementGroup>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="3"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="17">
+			<staticText>
+				<reportElement mode="Opaque" x="121" y="0" width="136" height="17" backcolor="#CCCCCC" uuid="2e1551b2-88f2-4f46-8dd5-ee097db3b84b"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[описание]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="257" y="0" width="136" height="17" backcolor="#CCCCCC" uuid="cd4753b2-503c-4d8c-bdaa-979eb7320a94"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[штрихкод]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="393" y="0" width="66" height="17" backcolor="#CCCCCC" uuid="ea14f0a6-f465-42f7-addf-27b15523cf12"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[цена]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="459" y="0" width="56" height="17" backcolor="#CCCCCC" uuid="dacabee9-d7b9-4669-803f-e3f898f184fd"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[колл.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="515" y="0" width="40" height="17" backcolor="#CCCCCC" uuid="8c75b930-7446-4a25-9831-858471bb0af4"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[мера]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="121" height="17" backcolor="#CCCCCC" uuid="ded40df5-7c6b-4011-9cc5-54fbfd95f712"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[наименование]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Immediate">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="121" height="14" uuid="5efd3e04-b5d7-4ccd-8de2-2f9bfccdb38e"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="121" y="0" width="136" height="14" uuid="edd1dce0-7d01-4001-b457-72f667507f4e"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="257" y="0" width="136" height="14" uuid="c41779e0-2991-4813-ad7d-e2289ef8cf45"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{csode}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement stretchType="RelativeToBandHeight" x="393" y="0" width="66" height="14" uuid="28068d10-e641-463b-98dd-fee8ae821ab7"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{priceForUnit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="459" y="0" width="56" height="14" uuid="32852878-913f-4e56-b20a-fe7be7ccc519"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{quantity}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToBandHeight" x="515" y="0" width="40" height="14" uuid="76d060c6-e8bc-4ec5-98df-5f354e67b685"/>
+				<box leftPadding="2" rightPadding="2">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{measure}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="7"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="203">
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="190" width="500" height="13" backcolor="#E6E6E6" uuid="748016b1-8250-46e3-a53e-fdb35d257430"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Страница "+$V{PAGE_NUMBER}+" из"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="500" y="190" width="55" height="13" backcolor="#E6E6E6" uuid="ce724783-e995-4852-a4ef-a1f6efea08e8"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement positionType="Float" x="0" y="190" width="100" height="13" uuid="a0adb220-7031-431b-b51f-d4bee271d989"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="28" width="555" height="15" uuid="a57ed9ba-19ea-40ec-9955-3df1c98187c4"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Подписи ответственных лиц:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="43" width="82" height="13" uuid="7bad0d39-c733-4e46-bf65-0418148ea44e"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Отпустил(а):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="56" width="82" height="13" uuid="d8ece114-b026-4870-b9af-41ad3d06856d"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Принял(а):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="69" width="82" height="13" uuid="6ceca755-d300-4dc9-b424-4d98c0fb0c74"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Принял(а):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="82" width="82" height="13" uuid="d6368dc4-a89b-46f9-937f-823f7b1e3e3e"/>
+				<textElement textAlignment="Right">
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[Принял(а):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="43" width="473" height="13" uuid="ae0e55d2-5977-4596-ae9b-c36cd853f4d4"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="56" width="473" height="13" uuid="63959416-521a-4f69-b82a-a2aeb574cea9"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="69" width="473" height="13" uuid="0112dc16-7b99-49fd-8dd5-87656357e98c"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="82" y="82" width="473" height="13" uuid="5d67c4d1-d611-4657-ae51-a5cb6a1a5327"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font fontName="DejaVu Sans Mono"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" x="0" y="171" width="555" height="19" uuid="e5629677-4b92-482b-b7d5-e90f4119455a"/>
+				<textElement>
+					<font fontName="DejaVu Sans Mono" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PAGE_FUTTER_TEXT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,63 @@
+export JAVA_HOME=/opt/jdk
+
+
+cd TTIReport
+/opt/ant/bin/ant clean
+cd ../
+
+cd TradeTerminalM1
+/opt/ant/bin/ant clean
+cd ../
+
+
+cd TTRAPSLDynamicBar3DPlot
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRAPSLUsersProgress
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRCustomerHistory
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTROrdersHistory
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRPPLForDate
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRProductMoving
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRProductMovingA3
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRProductMovingV2
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRProductsQantitys
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRPSLForDate
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRTovOborForDateScode
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRZReport
+/opt/ant/bin/ant clean
+cd ../
+
+cd TTRZOBForDate
+/opt/ant/bin/ant clean
+cd ../

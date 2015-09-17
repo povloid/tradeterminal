@@ -1,0 +1,2 @@
+mkdir  TradeTerminalM4/target/reports
+cp -v TTR*/target/*.jar TradeTerminalM4/target/reports/

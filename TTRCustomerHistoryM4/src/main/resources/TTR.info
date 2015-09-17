@@ -1,0 +1,9 @@
+tt.reports.customer_history.TTRCustomerHistory;Клиент;История клиента
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>История клиента<b></h1>
+        Выводит все операции, связанные с определеным клиентом.
+    </body>
+</html>

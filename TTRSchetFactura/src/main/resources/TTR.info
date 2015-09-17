@@ -1,0 +1,9 @@
+pk.reports.ttrschetfactura.TTRSchetFactura;Организация;Счет-фактура
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Счет-фактура<b></h1>
+        Выдает счет-фактуру по операции.
+    </body>
+</html>

@@ -1,0 +1,9 @@
+pk.reports.ttrschetnaopl.TTRSchetNaOpl;Организация;Счет на оплату
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Счет на оплату<b></h1>
+        Выдает счет на оплату товара.
+    </body>
+</html>

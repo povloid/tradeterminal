@@ -1,0 +1,9 @@
+tt.reports.product_movong_a3.TTRProductMovingA3;Товар;Товарооборот A3
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Товарооборот<b> в формате A3</h1>
+        Выводит оборот товара за период времени.
+    </body>
+</html>

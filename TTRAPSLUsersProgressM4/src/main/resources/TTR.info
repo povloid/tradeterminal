@@ -1,0 +1,9 @@
+tt.reports.gran.psl_users_progress.TTRAPSLUsersProgress;Аналитика;Прогресс сумм продаж
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Прогресс сумм продаж<b></h1>
+        Выводит график эффективности продаж пользователей;
+    </body>
+</html>

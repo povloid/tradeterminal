@@ -1,0 +1,9 @@
+tt.reports.gran.dynamic_bar3d_plot.TTRAPSLDynamicBar3DPlot;Аналитика;Динамика продаж
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Динамика продаж<b></h1>
+        Выводит график динамики продаж
+    </body>
+</html>

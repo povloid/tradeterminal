@@ -1,0 +1,9 @@
+tt.reports.tov_obor_for_date_scod.TTRTovOborForDateScode;Товар;Товарооборот 3
+<html>
+    <head>
+    </head>
+    <body>
+        <h1>Отчет <b>Товарооборот 3<b></h1>
+        Выводит оборот по конкретному товару за период времени.
+    </body>
+</html>
