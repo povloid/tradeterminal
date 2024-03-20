@@ -3,6 +3,19 @@
 # export JAVA_HOME=/opt/jdk7
 
 
+cd MinersInstrumentM4
+mvn clean install
+cd ../
+
+cd TTDbSettingsM4
+mvn clean install
+cd ../
+
+cd InstallDBM4
+mvn clean install
+cd ../
+
+
 cd TTIReportM4
 mvn clean install
 cd ../
@@ -92,5 +105,8 @@ cp -vr InstallDBM4/target/lib preinstall_TT/TT
 
 cp -vr TradeTerminalM4/target/TradeTerminalM4*.jar preinstall_TT/TT/TradeTerminal.jar
 cp -vr TradeTerminalM4/target/lib preinstall_TT/TT
+
+
+cp -v InstallDBM4/target/InstallDBM4-1.0-SNAPSHOT.jar preinstall_TT/TT/
 
 #cp -vr TradeTerminalM4/target/reports/ preinstall_TT/TT

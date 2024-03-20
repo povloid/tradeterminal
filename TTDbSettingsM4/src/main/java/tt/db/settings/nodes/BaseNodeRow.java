@@ -73,6 +73,8 @@ public final class BaseNodeRow extends DefaultMutableTreeNode {
         } catch (Exception ex) {
             Logger.getLogger(BaseNodeRow.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        System.out.println(">>>" + new String(out));
         return out;
     }
 
