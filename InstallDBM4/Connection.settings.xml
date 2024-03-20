@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.7.0_55" class="java.beans.XMLDecoder">
+ <object class="tt.db.settings.nodes.ServersList">
+  <void method="add">
+   <object class="tt.db.settings.nodes.ServerNodeRow">
+    <void method="add">
+     <object class="tt.db.settings.nodes.BaseNodeRow">
+      <void property="caption">
+       <string>kristall</string>
+      </void>
+      <void property="crDbUserPassw">
+       <string>197E69DDAAA5DF01</string>
+      </void>
+      <void property="dbName">
+       <string>kristall</string>
+      </void>
+      <void property="dbUserName">
+       <string>user1</string>
+      </void>
+      <void id="charArray0" property="dbUserPassw"/>
+      <void property="dbUserPassw">
+       <object idref="charArray0"/>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="tt.db.settings.nodes.BaseNodeRow">
+      <void property="caption">
+       <string>Тренировачная база</string>
+      </void>
+      <void property="crDbUserPassw">
+       <string>197E69DDAAA5DF01</string>
+      </void>
+      <void property="dbName">
+       <string>trbase</string>
+      </void>
+      <void property="dbUserName">
+       <string>user1</string>
+      </void>
+      <void id="charArray1" property="dbUserPassw"/>
+      <void property="dbUserPassw">
+       <object idref="charArray1"/>
+      </void>
+     </object>
+    </void>
+    <void method="add">
+     <object class="tt.db.settings.nodes.BaseNodeRow">
+      <void property="caption">
+       <string>kerey</string>
+      </void>
+      <void property="crDbUserPassw">
+       <string>197E69DDAAA5DF01</string>
+      </void>
+      <void property="dbName">
+       <string>kerey</string>
+      </void>
+      <void property="dbUserName">
+       <string>user1</string>
+      </void>
+      <void id="charArray2" property="dbUserPassw"/>
+      <void property="dbUserPassw">
+       <object idref="charArray2"/>
+      </void>
+     </object>
+    </void>
+    <void property="caption">
+     <string>localhost</string>
+    </void>
+    <void property="crPassword">
+     <string>197E69DDAAA5DF01</string>
+    </void>
+    <void property="host">
+     <string>localhost</string>
+    </void>
+    <void id="charArray3" property="password"/>
+    <void property="password">
+     <object idref="charArray3"/>
+    </void>
+    <void property="port">
+     <int>5432</int>
+    </void>
+    <void property="superuser">
+     <string>postgres</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="tt.db.settings.nodes.ServerNodeRow">
+    <void method="add">
+     <object class="tt.db.settings.nodes.BaseNodeRow">
+      <void property="caption">
+       <string>Демонтрационная база 1</string>
+      </void>
+      <void property="crDbUserPassw">
+       <string>197E69DDAAA5DF01</string>
+      </void>
+      <void property="dbName">
+       <string>demobase1</string>
+      </void>
+      <void property="dbUserName">
+       <string>user1</string>
+      </void>
+      <void id="charArray4" property="dbUserPassw"/>
+      <void property="dbUserPassw">
+       <object idref="charArray4"/>
+      </void>
+     </object>
+    </void>
+    <void property="caption">
+     <string>Politrend server</string>
+    </void>
+    <void property="crPassword">
+     <string>197E69DDAAA5DF01</string>
+    </void>
+    <void property="host">
+     <string>192.168.1.22</string>
+    </void>
+    <void id="charArray5" property="password"/>
+    <void property="password">
+     <object idref="charArray5"/>
+    </void>
+    <void property="port">
+     <int>5432</int>
+    </void>
+    <void property="superuser">
+     <string>postgres</string>
+    </void>
+   </object>
+  </void>
+  <void property="keyWordHash">
+   <string>93A66F4A0B17ECE4F63B1061C55EF00E9FD70C64</string>
+  </void>
+ </object>
+</java>

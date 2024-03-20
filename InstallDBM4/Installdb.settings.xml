@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_24" class="java.beans.XMLDecoder"> 
+ <object class="minersinstrument.savesettings.csettings.CSettings"> 
+  <void property="pars"> 
+   <void method="put"> 
+    <string>DROPDB_PATH</string> 
+    <string>/opt/PostgreSQL/8.4/bin/dropdb</string> 
+   </void> 
+   <void method="put"> 
+    <string>PSQL_PATH</string> 
+    <string>/opt/PostgreSQL/8.4/bin/psql</string> 
+   </void> 
+   <void method="put"> 
+    <string>CREATE_DB_PATH</string> 
+    <string>/opt/PostgreSQL/8.4/bin/createdb</string> 
+   </void> 
+   <void method="put"> 
+    <string>PG_DUMP_PATH</string> 
+    <string>/opt/PostgreSQL/8.4/bin/pg_dump</string> 
+   </void> 
+  </void> 
+ </object> 
+</java> 
