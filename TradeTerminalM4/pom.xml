@@ -17,8 +17,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.5.1</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -29,7 +29,7 @@
                         <id>copy-dependencies</id>
                         <phase>prepare-package</phase>
                         <goals>
-                            <goal>copy-dependencies</goal>  
+                            <goal>copy-dependencies</goal>
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.directory}/lib</outputDirectory>
@@ -53,12 +53,12 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${basedir}/target/</outputDirectory>
-                            <resources>          
+                            <resources>
                                 <resource>
                                     <directory>non-packaged-resources</directory>
                                 </resource>
-                            </resources>              
-                        </configuration>            
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -123,7 +123,7 @@
             <artifactId>swingx-all</artifactId>
             <version>1.6.4</version>
         </dependency>
-    
+
 
 
 

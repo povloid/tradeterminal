@@ -1,4 +1,6 @@
-export JAVA_HOME=/opt/jdk7
+#!/bin/bash
+
+# export JAVA_HOME=/opt/jdk7
 
 
 cd TTIReportM4
