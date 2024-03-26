@@ -94,6 +94,9 @@ cd TTRPrib
 mvn clean install
 cd ../
 
+mkdir -p preinstall_TT/TT/lib
+mkdir -p preinstall_TT/TT/reports
+
 rm -f preinstall_TT/TT/lib/*.*
 rm -f preinstall_TT/TT/reports/*.*
 

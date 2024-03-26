@@ -125,7 +125,7 @@ public final class MainForm extends javax.swing.JFrame {
 
 //
 //         UIManager.put(SubstanceLookAndFeel.SHOW_EXTRA_WIDGETS, Boolean.TRUE);
-//        
+//
 //        addLookAndFeelMenu("org.pushingpixzels.substance.api.skin.SubstanceAutumnLookAndFeel");
 //        addLookAndFeelMenu("org.pushingpixels.substance.api.skin.SubstanceBusinessBlackSteelLookAndFeel");
 //        addLookAndFeelMenu("org.pushingpixels.substance.api.skin.SubstanceBusinessBlueSteelLookAndFeel");
@@ -172,7 +172,7 @@ public final class MainForm extends javax.swing.JFrame {
 //        addLookAndFeelMenu("org.jvnet.substance.skin.SubstanceMistSilverLookAndFeel");
 //        addLookAndFeelMenu("org.jvnet.substance.skin.SubstanceMistAquaLookAndFeel");
 //
-//        // dark skins 
+//        // dark skins
 //        //addSeparatorToLookAndFeelMenu();
 //        addLookAndFeelMenu("org.jvnet.substance.skin.SubstanceRavenGraphiteLookAndFeel");
 //        addLookAndFeelMenu("org.jvnet.substance.skin.SubstanceRavenGraphiteGlassLookAndFeel");
@@ -631,12 +631,12 @@ public final class MainForm extends javax.swing.JFrame {
             return;
         }
 
-//        ARBControlPanel_MIdNamDes p = 
+//        ARBControlPanel_MIdNamDes p =
 //                new ARBControlPanel_MIdNamDes(Setup.getSource(),
 //                "rb_measures","rb_measures_id_seq");
 //        AUniversalCloseDialog d = new AUniversalCloseDialog(p, null, true);
 //        d.setTitleIcon(new javax.swing.ImageIcon(getClass().getResource("/tradeterminal/icons/addbk_32.png")));
-//        
+//
 //        d.setVisible(true); d.dispose();
 
         showPanel("measures ARBControlPanel_MIdNamDes");
@@ -644,12 +644,12 @@ public final class MainForm extends javax.swing.JFrame {
 
     @Action
     public void showCassControl() {
-//        MoneyOperationControlPanel p = 
+//        MoneyOperationControlPanel p =
 //                new MoneyOperationControlPanel();
 //        AUniversalCloseDialog d = new AUniversalCloseDialog(p, null, true);
 //        d.setTitleIcon(new javax.swing.ImageIcon(getClass().getResource("/tradeterminal/icons/tools_32.png")));
-//        
-//        d.setVisible(true); d.dispose();  
+//
+//        d.setVisible(true); d.dispose();
 
         // Проверка прав доступа
         if (!AppAccessSettings.isCurrentUserHasAccessWithMessage(
@@ -668,12 +668,12 @@ public final class MainForm extends javax.swing.JFrame {
             return;
         }
 
-//        ProductsControlPanel p = 
+//        ProductsControlPanel p =
 //                new ProductsControlPanel();
 //        AUniversalCloseDialog d = new AUniversalCloseDialog(p, null, true);
 //        d.setTitleIcon(new javax.swing.ImageIcon(getClass().getResource("/tradeterminal/icons/addbk_32.png")));
-//        
-//        d.setVisible(true); d.dispose(); 
+//
+//        d.setVisible(true); d.dispose();
 
         showPanel("ProductsMainPanel");
     }
